@@ -47,7 +47,7 @@ def get_todos():
 
             # to Mongol start block
             targeted_languga_text=convertTuple(result)   
-            print(synthesize(targeted_languga_text))
+            synthesize(targeted_languga_text)
             #to Mongol end block
 
             print(result[0])
@@ -72,12 +72,17 @@ def get_todos():
 
            # audio_file.save(os.path.join('path/to/save', audio_file.filename))
            # end s2s
-            return jsonify({'message': 'Audio file uploaded successfully'}), 200
+            return jsonify({'message': get_file_url()}), 200
         else:
             return jsonify({'error': 'No audio file provided'}), 400
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+
+def get_file_url():
+   
+    url='http://51.20.44.63:5000/translated/output.wav'
+    return url
 
 def convertTuple(tup):
     if(len(tup)>0):
