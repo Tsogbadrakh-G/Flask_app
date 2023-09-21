@@ -127,7 +127,7 @@ def synthesize(text):
     r = requests.post(
         url, data=text.encode('utf-8'), headers=headers)
 
-    with open("translated/output.wav", 'wb') as out:
+    with open("../var/www/html/output.wav", 'wb') as out:
         out.write(r.content)
 
 
