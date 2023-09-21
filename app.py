@@ -81,7 +81,7 @@ def get_todos():
 
 def get_file_url():
    
-    url='http://51.20.44.63:5000/translated/output.wav'
+    url='http://51.20.44.63/output.wav'
     return url
 
 def convertTuple(tup):
