@@ -57,16 +57,18 @@ def get_todos():
             result = translate(save_path, input_lan, output_lan, translation)
             #result = translate(save_path)
             print(result)
+
+            
             if output_lan == 'Halh Mongolian':
                 # to Mongol start block
                targeted_languga_text=convertTuple(result)   
                synthesize(targeted_languga_text)
             #to Mongol end block
             else:
-                save_path = os.path.join(os.getcwd(), 'uploads', audio_file.filename)
-                audio_file.save(save_path)
             
-                result = translate(save_path, input_lan, output_lan, translation)
+                print('to foriegn')
+            
+           
                 print(result[0])
                 path= result[0]
 
@@ -77,14 +79,14 @@ def get_todos():
                     audio_data = wf.readframes(-1)
                 print('Audio data read successfully.')
 
-                translated_path = os.path.join(os.getcwd(), '/var/www/html/output.wav', audio_file.filename)
+                translated_path = os.path.join(os.getcwd(), '/var/www/html/', 'output.wav')
                 with wave.open(translated_path, 'w') as new_wf:
                         # Write audio data to the new file
                     new_wf.setnchannels(wf.getnchannels())
                     new_wf.setsampwidth(wf.getsampwidth())
                     new_wf.setframerate(wf.getframerate())
                     new_wf.writeframes(audio_data)
-                    print('Audio data written to the new file:', translated_path)
+                print('Audio data written to the new file:', translated_path)
                     
                 print('4')
             
