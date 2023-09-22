@@ -76,6 +76,7 @@ def get_todos():
         else:
             return jsonify({'error': 'No audio file provided'}), 400
     except Exception as e:
+        print(e)
         return jsonify({'error': str(e)}), 500
 
 
@@ -127,7 +128,7 @@ def synthesize(text):
     r = requests.post(
         url, data=text.encode('utf-8'), headers=headers)
 
-    with open("../var/www/html/output.wav", 'wb') as out:
+    with open("/var/www/html/output.wav", 'wb') as out:
         out.write(r.content)
 
 
