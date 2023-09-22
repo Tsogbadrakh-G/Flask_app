@@ -37,40 +37,46 @@ def hello_there(name):
 def get_todos():
     try:
         audio_file = request.files['audio']
+        input_lan=request.files['input']
+        output_lan=request.files['output']
+
+
+        translation=request.files['translation']
 
 
         if audio_file:
         #     # Save the audio file to a desired location
             save_path = os.path.join(os.getcwd(), 'uploads', audio_file.filename)
             audio_file.save(save_path)
-            result = translate(save_path)
-
-            # to Mongol start block
-            targeted_languga_text=convertTuple(result)   
-            synthesize(targeted_languga_text)
-            #to Mongol end block
-
-            print(result[0])
-            path= result[0]
-
-          #  below is speech to speech start
-
-            # with wave.open(path, 'r') as wf:
-            #     # Read audio data
-            #     audio_data = wf.readframes(-1)
-            #     print('Audio data read successfully.')
-
-            # translated_path = os.path.join(os.getcwd(), 'translated', audio_file.filename)
-            # with wave.open(translated_path, 'w') as new_wf:
-            #     # Write audio data to the new file
-            #     new_wf.setnchannels(wf.getnchannels())
-            #     new_wf.setsampwidth(wf.getsampwidth())
-            #     new_wf.setframerate(wf.getframerate())
-            #     new_wf.writeframes(audio_data)
-            #     print('Audio data written to the new file:', translated_path)
+            result = translate(save_path, input_lan=input_lan,output_lan=output_lan,translate=translation)
             
+            if output_lan=='Halh Mongolian':
+            # to Mongol start block
+                targeted_languga_text=convertTuple(result)   
+                synthesize(targeted_languga_text)
+            #to Mongol end block
+            else:
+                print(result[0])
+                path= result[0]
 
-           # audio_file.save(os.path.join('path/to/save', audio_file.filename))
+            #  below is speech to speech start
+
+                with wave.open(path, 'r') as wf:
+                    # Read audio data
+                    audio_data = wf.readframes(-1)
+                    print('Audio data read successfully.')
+
+                translated_path = os.path.join(os.getcwd(), 'translated', audio_file.filename)
+                with wave.open(translated_path, 'w') as new_wf:
+                    # Write audio data to the new file
+                    new_wf.setnchannels(wf.getnchannels())
+                    new_wf.setsampwidth(wf.getsampwidth())
+                    new_wf.setframerate(wf.getframerate())
+                    new_wf.writeframes(audio_data)
+                    print('Audio data written to the new file:', translated_path)
+                
+
+            #audio_file.save(os.path.join('path/to/save', audio_file.filename))
            # end s2s
             return jsonify({'message': get_file_url()}), 200
         else:
@@ -90,31 +96,35 @@ def convertTuple(tup):
       st = ''.join(map(str, tup))
       return st[4:len(st)-1]
     
-def translate(url):
-    result = client.predict(
-				"S2TT (Speech to Text translation)",	# str  in 'Task' Dropdown component
-                "files",	# str in 'Audio source' Radio component
-				url,	# str (filepath or URL to file) in 'Input speech' Audio component
-				url,	# str (filepath or URL to file)in  'Input speech'# Audio component
-				"hi!",	# str in 'Input text' Textbox component
-				"English",	# str  in 'Source language' Dropdown component
-				"Halh Mongolian",	# str  in 'Target language' Dropdown component
-				api_name="/run"
-                )       
+def translate(url, input_lan, output_lan,translate):
 
-       
-    return result
-    # result = client.predict(  
-    #                 "S2ST (Speech to Speech translation)",	# str  in 'Task' Dropdown component
-    #                 "files",	# str in 'Audio source' Radio component
-    #                 url,	# str (filepath or URL to file) in 'Input speech' Audio component
-    #                 url,	# str (filepath or URL to file)in  'Input speech'# Audio component
-    #                 "hi!",	# str in 'Input text' Textbox component
-    #                 "Halh Mongolian",	# str  in 'Source language' Dropdown component
-    #                 "English",	# str  in 'Target language' Dropdown component
-    #                 api_name="/run"
-    # )
-    # return result
+    if output_lan=='Halh Mongolian':
+        result = client.predict(
+                    translate,	# str  in 'Task' Dropdown component
+                    "files",	# str in 'Audio source' Radio component
+                    url,	# str (filepath or URL to file) in 'Input speech' Audio component
+                    url,	# str (filepath or URL to file)in  'Input speech'# Audio component
+                    "hi!",	# str in 'Input text' Textbox component
+                    input_lan,	# str  in 'Source language' Dropdown component
+                    output_lan,	# str  in 'Target language' Dropdown component
+                    api_name="/run"
+                    )       
+
+        
+        return result
+    else:
+
+        result = client.predict(  
+                        translate,	# str  in 'Task' Dropdown component
+                        "files",	# str in 'Audio source' Radio component
+                        url,	# str (filepath or URL to file) in 'Input speech' Audio component
+                        url,	# str (filepath or URL to file)in  'Input speech'# Audio component
+                        "hi!",	# str in 'Input text' Textbox component
+                        input_lan,	# str  in 'Source language' Dropdown component
+                        output_lan,	# str  in 'Target language' Dropdown component
+                        api_name="/run"
+        )
+        return result
 
 
 
