@@ -37,46 +37,53 @@ def hello_there(name):
 def get_todos():
     try:
         audio_file = request.files['audio']
-        input_lan=request.files['input']
-        output_lan=request.files['output']
+        input_lan=request.form.get('input')
+        output_lan=request.form.get('output')
+        translation=request.form.get('translation')
+      
+        print(input_lan)
+        print(output_lan)
+        print(translation)
 
-
-        translation=request.files['translation']
-
-
+        # input_lan="English"
+        # output_lan="Halh Mongolian"
+        # translation="S2TT (Speech to Text translation)"
+        
         if audio_file:
         #     # Save the audio file to a desired location
             save_path = os.path.join(os.getcwd(), 'uploads', audio_file.filename)
             audio_file.save(save_path)
-            result = translate(save_path, input_lan=input_lan,output_lan=output_lan,translate=translation)
             
-            if output_lan=='Halh Mongolian':
-            # to Mongol start block
-                targeted_languga_text=convertTuple(result)   
-                synthesize(targeted_languga_text)
+            result = translate(save_path, input_lan, output_lan, translation)
+            #result = translate(save_path)
+            print(result)
+            if output_lan == 'Halh Mongolian':
+                # to Mongol start block
+               targeted_languga_text=convertTuple(result)   
+               synthesize(targeted_languga_text)
             #to Mongol end block
             else:
                 print(result[0])
                 path= result[0]
 
-            #  below is speech to speech start
+                #  below is speech to speech start
 
                 with wave.open(path, 'r') as wf:
-                    # Read audio data
+                        # Read audio data
                     audio_data = wf.readframes(-1)
-                    print('Audio data read successfully.')
+                print('Audio data read successfully.')
 
                 translated_path = os.path.join(os.getcwd(), 'translated', audio_file.filename)
                 with wave.open(translated_path, 'w') as new_wf:
-                    # Write audio data to the new file
+                        # Write audio data to the new file
                     new_wf.setnchannels(wf.getnchannels())
                     new_wf.setsampwidth(wf.getsampwidth())
                     new_wf.setframerate(wf.getframerate())
                     new_wf.writeframes(audio_data)
                     print('Audio data written to the new file:', translated_path)
-                
-
-            #audio_file.save(os.path.join('path/to/save', audio_file.filename))
+                    
+                print('4')
+            
            # end s2s
             return jsonify({'message': get_file_url()}), 200
         else:
@@ -110,7 +117,7 @@ def translate(url, input_lan, output_lan,translate):
                     api_name="/run"
                     )       
 
-        
+
         return result
     else:
 
@@ -127,18 +134,19 @@ def translate(url, input_lan, output_lan,translate):
         return result
 
 
-
 def synthesize(text):
     url = "https://api.chimege.com/v1.2/synthesize"
     headers = {
         'Content-Type': 'plain/text',
         'Token': '7769d0fe9a57fda0588cae44dff6f469ad1ea464a003a0f004034c3443f9fe40',
     }
-
+    print('pre calling chimege api')
     r = requests.post(
         url, data=text.encode('utf-8'), headers=headers)
+    
+    print('after calling chimege api')
 
-    with open("../var/www/html/output.wav", 'wb') as out:
+    with open("/var/www/html/output.wav", 'wb') as out:
         out.write(r.content)
 
 
