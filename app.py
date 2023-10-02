@@ -85,7 +85,7 @@ def get_todos():
                         audio_data = wf.readframes(-1)
                     print('Audio data read successfully.')
 
-                    translated_path = os.path.join(os.getcwd(), '/var/www/html/',username+'.wav')
+                    translated_path = os.path.join(os.getcwd(), '/var/www/html/','output.wav')
                     with wave.open(translated_path, 'w') as new_wf:
                             # Write audio data to the new file
                         new_wf.setnchannels(wf.getnchannels())
@@ -112,9 +112,9 @@ def get_todos():
         return jsonify({'error': str(e)}), 500
 
 
-def get_file_url(chatroomId, username ):
+def get_file_url():
    
-    url='http://51.20.44.63/'+chatroomId+'/'+username+'.wav'
+    url='http://51.20.44.63/output.wav'
     return url
 
 def convertTuple(tup):
@@ -179,7 +179,7 @@ def synthesize(text,chatroomId, username):
     
     print('after calling chimege api')
 
-    with open("/var/www/html/"+username+".wav", 'wb') as out:
+    with open("/var/www/html/output.wav", 'wb') as out:
         out.write(r.content)
 
 
