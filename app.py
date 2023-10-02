@@ -85,7 +85,7 @@ def get_todos():
                         audio_data = wf.readframes(-1)
                     print('Audio data read successfully.')
 
-                    translated_path = os.path.join(os.getcwd(), '/var/www/html/',chatroomid,username+'.wav')
+                    translated_path = os.path.join(os.getcwd(), '/var/www/html/','output.wav')
                     with wave.open(translated_path, 'w') as new_wf:
                             # Write audio data to the new file
                         new_wf.setnchannels(wf.getnchannels())
@@ -179,7 +179,7 @@ def synthesize(text,chatroomId, username):
     
     print('after calling chimege api')
 
-    with open("/var/www/html/"+chatroomId,username+".wav", 'wb') as out:
+    with open("/var/www/html/output.wav", 'wb') as out:
         out.write(r.content)
 
 
