@@ -85,7 +85,7 @@ def get_todos():
                         audio_data = wf.readframes(-1)
                     print('Audio data read successfully.')
 
-                    translated_path = os.path.join(os.getcwd(), '/var/www/html/','output.wav')
+                    translated_path = os.path.join(os.getcwd(), '/var/www/html','output.wav')
                     with wave.open(translated_path, 'w') as new_wf:
                             # Write audio data to the new file
                         new_wf.setnchannels(wf.getnchannels())
