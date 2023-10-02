@@ -41,6 +41,8 @@ def get_todos():
         input_lan=request.form.get('input')
         output_lan=request.form.get('output')
        
+        chatroomid="room"
+        username="tsog"
       
         print(input_lan)
         print(output_lan)
@@ -66,7 +68,7 @@ def get_todos():
                 if output_lan == 'Halh Mongolian':
                     # to Mongol start block
                   targeted_languga_text=convertTuple(result)   
-                  synthesize(targeted_languga_text)
+                  synthesize(targeted_languga_text,chatroomId=chatroomid,username=username)
                 #to Mongol end block
                 else:
                 
@@ -83,7 +85,7 @@ def get_todos():
                         audio_data = wf.readframes(-1)
                     print('Audio data read successfully.')
 
-                    translated_path = os.path.join(os.getcwd(), '/var/www/html/', 'output.wav')
+                    translated_path = os.path.join(os.getcwd(), '/var/www/html/',chatroomid ,'/',username,'.wav')
                     with wave.open(translated_path, 'w') as new_wf:
                             # Write audio data to the new file
                         new_wf.setnchannels(wf.getnchannels())
@@ -110,9 +112,9 @@ def get_todos():
         return jsonify({'error': str(e)}), 500
 
 
-def get_file_url():
+def get_file_url(chatroomId, username ):
    
-    url='http://51.20.44.63/output.wav'
+    url='http://51.20.44.63/'+chatroomId+'/'+username+'.wav'
     return url
 
 def convertTuple(tup):
@@ -165,7 +167,7 @@ def translate_text(txt, input_lan, output_lan):
         )
         return result
 
-def synthesize(text):
+def synthesize(text,chatroomId, username):
     url = "https://api.chimege.com/v1.2/synthesize"
     headers = {
         'Content-Type': 'plain/text',
@@ -177,7 +179,7 @@ def synthesize(text):
     
     print('after calling chimege api')
 
-    with open("/var/www/html/output.wav", 'wb') as out:
+    with open("/var/www/html/"+chatroomId+'/'+username+".wav", 'wb') as out:
         out.write(r.content)
 
 
