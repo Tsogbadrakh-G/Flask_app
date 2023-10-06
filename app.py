@@ -2,10 +2,15 @@ import os
 import re
 from datetime import datetime
 import wave
+import time
 from flask import Flask, jsonify, render_template, request, redirect, session
+
+from agora_token.RtcTokenBuilder import Role_Subscriber, RtcTokenBuilder
 app = Flask(__name__)
 from gradio_client import Client
 from gradio_client import Client
+
+
 import requests
 
 client = Client("https://facebook-seamless-m4t.hf.space/")
@@ -31,6 +36,25 @@ def hello_there(name):
 
     content = "Hello there, " + clean_name + "! It's " + formatted_now
     return content
+
+@app.route('/generate_agora_token/<channelName>', methods=['POST'])
+def generate_token(channelName):
+   
+   
+    # Your Agora App ID and App Certificate
+    app_id = "d565b44b98164c39b2b1855292b22dd2"
+    app_certificate = "caf2f127d2a64a5d92afaf7aee8b3609"
+    # User ID (Optional)
+    user_id =request.form.get('uid')
+ 
+    expireTimeInSeconds = 3600
+    currentTimestamp = int(time.time())
+    privilegeExpiredTs = currentTimestamp + expireTimeInSeconds
+
+    token = RtcTokenBuilder.buildTokenWithUid(
+        app_id, app_certificate, channelName, user_id, 1, privilegeExpiredTs)
+
+    return jsonify({'token': token})
 
 
 @app.route('/todo', methods=["POST"])
