@@ -53,8 +53,9 @@ def generate_token(channelName):
 
     token = RtcTokenBuilder.buildTokenWithUid(
         app_id, app_certificate, channelName, user_id, 1, privilegeExpiredTs)
-
+    print('token: ',token)
     return jsonify({'token': token})
+
 
 
 @app.route('/todo', methods=["POST"])
