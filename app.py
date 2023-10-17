@@ -68,7 +68,8 @@ def get_todos():
         input_lan=request.form.get('input')
         output_lan=request.form.get('output')
        
-        chatroomid="room"
+        chatroomid=request.form.get('roomId')
+        print('roomid',chatroomid)
         username="tsog"
       
         print(input_lan)
@@ -112,7 +113,7 @@ def get_todos():
                         audio_data = wf.readframes(-1)
                     print('Audio data read successfully.')
 
-                    translated_path = os.path.join(os.getcwd(), '/var/www/html','output.wav')
+                    translated_path = os.path.join(os.getcwd(), '/var/www/html',chatroomid,'output.wav')
                     with wave.open(translated_path, 'w') as new_wf:
                             # Write audio data to the new file
                         new_wf.setnchannels(wf.getnchannels())
@@ -124,7 +125,7 @@ def get_todos():
                     print('4')
                 
             # end s2s
-                return jsonify({'message': get_file_url()}), 200
+                return jsonify({'message': get_file_url(chatroomid)}), 200
             else:
                 return jsonify({'error': 'No audio file provided'}), 400
         else:
@@ -139,9 +140,9 @@ def get_todos():
         return jsonify({'error': str(e)}), 500
 
 
-def get_file_url():
+def get_file_url(chatroomid):
    
-    url='http://51.20.44.63/output.wav'
+    url='http://51.20.44.63/',chatroomid,'output.wav'
     return url
 
 def convertTuple(tup):
@@ -206,7 +207,7 @@ def synthesize(text,chatroomId, username):
     
     print('after calling chimege api')
 
-    with open("/var/www/html/output.wav", 'wb') as out:
+    with open("/var/www/html/",chatroomId,"output.wav", 'wb') as out:
         out.write(r.content)
 
 
