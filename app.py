@@ -115,7 +115,7 @@ def get_todos():
                         audio_data = wf.readframes(-1)
                     print('Audio data read successfully.')
 
-                    new_directory = 'outputs/'+chatroomid+'/'+username
+                    new_directory = '/home/ubuntu/download/'+chatroomid+'/'+username
                     print(new_directory)
                     print(os.path.exists(new_directory))
                     if not os.path.exists(new_directory):
@@ -217,7 +217,7 @@ def synthesize(text,chatroomId, username):
     
     print('after calling chimege api')
 
-    with open("outputs/"+chatroomId+"/"+username+"/output.wav", 'wb') as out:
+    with open("/home/ubuntu/download/"+chatroomId+"/"+username+"/output.wav", 'wb') as out:
         out.write(r.content)
 
 
