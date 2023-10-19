@@ -115,7 +115,11 @@ def get_todos():
                         audio_data = wf.readframes(-1)
                     print('Audio data read successfully.')
 
-                    translated_path = os.path.join(os.getcwd(), 'outputs/'+chatroomid+'/'+username+'/output.wav')
+                    new_directory = 'outputs/'+chatroomid+'/'+username
+                    if not os.path.exists(new_directory):
+                        os.mkdir(new_directory)
+
+                    translated_path = os.path.join(os.getcwd(), new_directory+ '/output.wav')
                     with wave.open(translated_path, 'w') as new_wf:
                             # Write audio data to the new file
                         new_wf.setnchannels(wf.getnchannels())
