@@ -120,7 +120,7 @@ def get_todos():
                     print(os.path.exists(new_directory))
                     if not os.path.exists(new_directory):
                         print('creating direcotry')
-                        os.mkdir(new_directory)
+                        os.makedirs(new_directory)
                         print('created')
 
                     translated_path = os.path.join(os.getcwd(), new_directory+ '/output.wav')
