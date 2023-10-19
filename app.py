@@ -116,6 +116,7 @@ def get_todos():
                     print('Audio data read successfully.')
 
                     new_directory = 'outputs/'+chatroomid+'/'+username
+                    print(os.path.exists(new_directory))
                     if not os.path.exists(new_directory):
                         os.mkdir(new_directory)
 
