@@ -10,10 +10,18 @@ app = Flask(__name__)
 from gradio_client import Client
 from gradio_client import Client
 
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import messaging
+
 
 import requests
 
 client = Client("https://facebook-seamless-m4t.hf.space/")
+cred = credentials.Certificate("./language-exchange-app.json")
+firebase_admin.initialize_app(cred)
+
+app_init=False
 
 @app.route("/")
 def home():
@@ -36,6 +44,36 @@ def hello_there(name):
 
     content = "Hello there, " + clean_name + "! It's " + formatted_now
     return content
+
+@app.route("/sendChat", methods=['GET'])
+def send_Notification():
+
+    fcm=request.form.get('fcm')
+    name=request.form.get('name')
+    content=request.form.get('content')
+    print('send notification:'+fcm+' name:'+name+' content:'+content)
+    
+    
+    
+   
+  #  if not app_init:
+        
+        #app_init=True
+
+    # Create a message with the notification payload
+    message = messaging.Message(
+        notification=messaging.Notification(
+            title=name,
+            body=content,
+        ),
+      
+        token=fcm,  # Replace with the FCM token of the target device
+    )
+
+    # Send the message
+    response = messaging.send(message)
+    print("Successfully sent message:", response)
+    return response
 
 @app.route('/generate_agora_token/<channelName>', methods=['POST'])
 def generate_token(channelName):
