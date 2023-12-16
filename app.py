@@ -120,10 +120,12 @@ def get_todos():
         # output_lan="Halh Mongolian"
         # translation="S2TT (Speech to Text translation)"
         if conv_type=="audio":
+            print('1')
             translation=request.form.get('translation')
             audio_file = request.files['audio']
             print(translation)
             if audio_file:
+                print('1')
             #     # Save the audio file to a desired location
                 save_path = os.path.join(os.getcwd(), 'uploads', audio_file.filename)
                 audio_file.save(save_path)
