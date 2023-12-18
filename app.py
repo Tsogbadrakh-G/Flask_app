@@ -192,7 +192,7 @@ def get_todos():
 
 def get_file_url(chatroomid,username):
    
-    url='http://51.20.44.63/download/'+chatroomid+'/'+username+'/output.wav'
+    url='http://13.125.68.71/download/'+chatroomid+'/'+username+'/output.wav'
     return url
 
 def convertTuple(tup):
