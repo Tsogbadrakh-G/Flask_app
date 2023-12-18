@@ -106,11 +106,7 @@ def get_todos():
         input_lan=request.form.get('input')
         output_lan=request.form.get('output')
        
-        chatroomid=request.form.get('roomId')
-        username=request.form.get('myUsername')
-
-        print('roomid',chatroomid)
-        print('myusername',username)
+      
       
         print(input_lan)
         print(output_lan)
@@ -120,7 +116,11 @@ def get_todos():
         # output_lan="Halh Mongolian"
         # translation="S2TT (Speech to Text translation)"
         if conv_type=="audio":
-            print('1')
+            chatroomid=request.form.get('roomId')
+            username=request.form.get('myUsername')
+
+            print('roomid',chatroomid)
+            print('myusername',username)
             translation=request.form.get('translation')
             audio_file = request.files['audio']
             print(translation)
